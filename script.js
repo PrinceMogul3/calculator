@@ -61,7 +61,7 @@ $(document).ready(function() {
     // Reset deletePressed flag on any key input
     deletePressed = false;
 
-    // Logic for clear, equal, operators, decimal, and number handling
+    // Logic for clear, operators, decimal, and number handling
     // Similar to your existing logic inside $keys.click()
   }
 
