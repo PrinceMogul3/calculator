@@ -1,4 +1,4 @@
-/* Reset & body */
+/* Reset & body styles */
 *,
 *::before,
 *::after {
@@ -7,125 +7,85 @@
 
 html,
 body {
+  margin: 0;
+  padding: 0;
   min-height: 100%;
-}
-
-body {
-  background: #1A1A1A;
   font-family: 'Open Sans', sans-serif;
+  background: #2F3438; /* Dark mode background */
+  color: #fff; /* Default text color for dark mode */
 }
 
-/* Calculator */
+/* Calculator styles */
 .calculator {
   width: 300px;
-  background:#323232;
-  margin: 30px auto;
-  position: fixed;
-  overflow: hidden;
+  background: #2F3438; /* Dark mode background for calculator */
+  margin: 50px auto;
   border-radius: 20px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
 }
 
-/* Screen */
+/* Screen styles */
 .screen {
-  background: #F4F4F4;
-  padding: 15px 28px;
-  height: 69px;
-  text-align: right;
-  font-size: 29px;
-  color: #4c455a;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  transition: color 0.6s ease-in-out;
+  background: #373c3f; /* Dark mode color for the screen */
+  color: #ffffff; /* White text color for better visibility */
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 32px; /* Larger font size for readability */
+  font-weight: bold; /* Bold font for screen numbers */
 }
 
-.screen::after {
-  content: '';
-  display: table;
-  clear: both;
+/* Button grid container */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns grid */
+  gap: 10px; /* Space between buttons */
+  padding: 10px 0;
 }
 
-/* Buttons */
+/* Button styles */
 .buttons button {
-  float: right;
+  background: #373c3f; /* Dark mode button color */
+  color: #ffffff; /* White text color for buttons */
   border: none;
-  background: transparent;
-  color: #fff;
-  padding: 15px 10px;
-  outline: none;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 14px;
+  padding: 20px;
+  border-radius: 50%; /* Circle buttons */
   cursor: pointer;
+  font-size: 18px; /* Font size for buttons */
+  transition: background 0.3s, transform 0.1s; /* Transition for interactive effects */
 }
 
 .buttons button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #2F3438; /* Slightly lighter color on hover */
 }
 
-.buttons button:active,
-.buttons button.active {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
+.buttons button:active {
+  transform: scale(0.9); /* Pressed effect when active */
 }
 
-.buttons::after {
-  content: '';
-  display: table;
-  clear: both;
-}
-
-.numbers {
-  float: left;
-  width: 75%;
-  padding: 10px;
-}
-
-.numbers button {
-  width: 33.3333%;
-  padding: 18px 10px;
-}
-
-.operators {
-  float: right;
-  width: 25%;
-  padding: 16px 10px 10px;
-  background: rgba(0, 0, 0, 0.1);
-  min-height: 260px;
-}
-
-.operators button {
-  width: 100%;
-  padding: 11px 10px;
-}
-
-.operators button[data-val="x"] {
-  font-size: 13px;
-}
-
-.operators button[data-val="-"] {
-  font-size: 18px;
-}
-
+/* Equals button style */
 .operators button[data-val="="] {
-  font-size: 16px;
+  background: #FF9500; /* Orange color for the equals button */
 }
 
-/* History */
+/* Clear button style */
+.numbers button[data-val="clear"] {
+  background: #ff3b30; /* Red color for the clear button */
+}
+
+/* History styles */
 .history {
-  background: #2C2C2C; /* Slightly darker than calculator for contrast */
-  color: #FFFFFF;
-  font-size: 14px;
-  padding: 10px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  max-height: 200px;
+  background: #2F3438; /* Dark mode background for history */
+  color: #ffffff; /* White text color for history entries */
   overflow-y: auto;
+  max-height: 100px; /* Limit height with scroll */
+  margin-top: 20px; /* Space above the history */
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 14px;
 }
 
 .history-entry {
-  border-bottom: 1px solid #414141;
+  border-bottom: 1px solid #414141; /* Subtle border for each entry */
   padding: 5px 0;
 }
