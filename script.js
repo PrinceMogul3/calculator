@@ -3,7 +3,7 @@ $(document).ready(function() {
   var $screen = $('.screen');
   var decimalAdded = false;
   var operators = ['+', '-', 'x', '÷'];
-  var deletePressed = false; // Flag to track if delete was pressed once
+  var deletePressed = false;
 
   $keys.click(function() {
     var keyVal = $(this).data('val');
@@ -12,75 +12,84 @@ $(document).ready(function() {
   });
 
   function handleKeyInput(keyVal, output) {
-    deletePressed = false; // Reset deletePressed flag on any key input
+    deletePressed = false;
 
-    if (keyVal === 'clear') {
-      $screen.html('');
-      decimalAdded = false;
-    } else if (keyVal === '=') {
-      output = output.replace(/x/g, '*').replace(/÷/g, '/');
-      try {
-        var result = eval(output);
-        $screen.html(result);
-        decimalAdded = output.includes('.');
-      } catch (e) {
-        $screen.html('Error');
-      }
-    } else if (operators.includes(keyVal)) {
-      if (!output || operators.includes(output.slice(-1))) return;
-      $screen.html(output + keyVal);
-      decimalAdded = false;
-    } else if (keyVal === '.') {
-      if (!decimalAdded) {
-        $screen.html(output + keyVal);
-        decimalAdded = true;
-      }
-    } else {
-      $screen.html(output + keyVal);
+    switch(keyVal) {
+      case 'clear':
+        $screen.html('');
+        decimalAdded = false;
+        break;
+      case '=':
+        output = output.replace(/x/g, '*').replace(/÷/g, '/');
+        try {
+          var result = eval(output);
+          $screen.html(result);
+          decimalAdded = output.includes('.');
+        } catch (e) {
+          $screen.html('Error');
+        }
+        break;
+      case '.':
+        if (!decimalAdded) {
+          $screen.html(output + keyVal);
+          decimalAdded = true;
+        }
+        break;
+      case 'backspace':
+        backspaceKeyFunction();
+        break;
+      case 'delete':
+        deleteKeyFunction();
+        break;
+      default:
+        if (operators.includes(keyVal)) {
+          if (output && !operators.includes(output.slice(-1))) {
+            $screen.html(output + keyVal);
+          }
+        } else {
+          $screen.html(output + keyVal);
+        }
     }
   }
 
   function backspaceKeyFunction() {
     var currentVal = $screen.html();
-    if (currentVal.length > 0) {
-      $screen.html(currentVal.slice(0, -1));
-      decimalAdded = currentVal.slice(-1) === '.' ? false : decimalAdded;
-    }
+    $screen.html(currentVal.slice(0, -1));
+    decimalAdded = false;
   }
 
   function deleteKeyFunction() {
     $screen.html('');
     decimalAdded = false;
-    deletePressed = !deletePressed;
-    if (!deletePressed) setTimeout(() => deletePressed = false, 2000); // Reset after 2 seconds
   }
 
   $(window).keydown(function(e) {
     var key = mapKeycodeToValue(e.which);
     if (key) {
-      e.preventDefault(); // Prevent the default action for the key
+      e.preventDefault();
       handleKeyInput(key, $screen.html());
     }
   });
 
   function mapKeycodeToValue(keyCode) {
     const keycodeMappings = {
-      8: 'backspace', // Backspace
-      46: 'delete', // Delete
-      13: '=', // Enter
-      110: '.', 190: '.', // Period (main keyboard and numpad)
-      107: '+', 187: '+', // Plus (main keyboard and numpad)
-      109: '-', 189: '-', // Minus (main keyboard and numpad)
-      106: 'x', // Multiply (numpad)
-      111: '÷', 191: '÷', // Divide (main keyboard and numpad)
+      8: 'backspace', 46: 'delete', 13: '=', 110: '.', 190: '.', // Period and Delete
+      107: '+', 187: '+', 109: '-', 189: '-', 106: 'x', 111: '÷', 191: '÷'
     };
     // Numbers on main keyboard (48-57) and numpad (96-105)
-    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)) {
-      return String.fromCharCode(keyCode >= 96 ? keyCode - 48 : keyCode);
-    }
-    if (keyCode === 8) backspaceKeyFunction(); // Handle backspace separately
-    else if (keyCode === 46) deleteKeyFunction(); // Handle delete separately
-
+    if (keyCode >= 48 && keyCode <= 57) return String.fromCharCode(keyCode);
+    if (keyCode >= 96 && keyCode <= 105) return String(keyCode - 96);
     return keycodeMappings[keyCode] || null;
   }
+
+  function autoEnterMogul() {
+    // Sequence "Mogul" translates to "12345"
+    const mogulSequence = '66485';
+    mogulSequence.split('').forEach(digit => {
+      handleKeyInput(digit, $screen.html());
+    });
+  }
+
+  // Automatically enter "Mogul" sequence upon initialization
+  autoEnterMogul();
 });
