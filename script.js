@@ -1,36 +1,33 @@
 $(document).ready(function() {
   var $keys = $('.calculator button');
   var $screen = $('.screen');
-  var $history = $('.history'); // Assuming a div for history
+  var $history = $('.history'); // Assuming a div for history is present in the HTML
   var decimalAdded = false;
-  var deletePressed = false;
-
-  function updateHistory(expression, result) {
-    var entry = $("<div>").addClass("history-entry");
-    entry.html(`${expression} = ${result}`);
-    $history.prepend(entry); // Add new entry to the top
-    if ($history.children().length > 5) { // Limit history entries
-      $history.children().last().remove();
-    }
-  }
 
   $keys.click(function() {
     var keyVal = $(this).data('val');
     var output = $screen.html();
     if (keyVal === '=') {
       var result = handleCalculation(output);
-      updateHistory(output, result);
+      if (output) { // Only update history if there is an expression to evaluate
+        updateHistory(output, result);
+      }
       $screen.html(result);
+      decimalAdded = false; // Reset decimal flag after calculation
+    } else if (keyVal === 'clear') {
+      $screen.html('');
+      decimalAdded = false;
     } else {
       handleKeyInput(keyVal, output);
     }
   });
 
   function handleKeyInput(keyVal, output) {
-    deletePressed = false;
-    if (keyVal === 'clear') {
-      $screen.html('');
-      decimalAdded = false;
+    if (keyVal === '.') {
+      if (!decimalAdded) {
+        $screen.html(output + keyVal);
+        decimalAdded = true;
+      }
     } else {
       $screen.html(output + keyVal);
     }
@@ -47,18 +44,15 @@ $(document).ready(function() {
 
   $(window).keydown(function(e) {
     var key = mapKeycodeToValue(e.which);
-    if (key === 'backspace') {
+    if (key) {
       e.preventDefault();
-      backspaceKeyFunction();
-    } else if (key) {
-      e.preventDefault();
-      var output = $screen.html();
-      if (key === '=') {
-        var result = handleCalculation(output);
-        updateHistory(output, result);
-        $screen.html(result);
+      if (key === 'backspace') {
+        backspaceKeyFunction();
+      } else if (key === 'delete') {
+        $screen.html('');
+        decimalAdded = false;
       } else {
-        handleKeyInput(key, output);
+        $keys.filter(`[data-val="${key}"]`).click();
       }
     }
   });
@@ -70,8 +64,19 @@ $(document).ready(function() {
   }
 
   function mapKeycodeToValue(keyCode) {
-    // Implement keycode mapping here
+    const keycodeMappings = {
+      8: 'backspace',
+      13: '=',
+      46: 'delete',
+      110: '.', 190: '.', // Decimal
+      107: '+', 187: (e.shiftKey ? '+' : '='),
+      109: '-', 189: '-',
+      106: 'x',
+      111: '÷', 191: '÷',
+    };
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)) { // Numbers
+      return String(keyCode >= 96 ? keyCode - 96 : String.fromCharCode(keyCode));
+    }
+    return keycodeMappings[keyCode] || null;
   }
-
-  // Automatically entering a sequence or any other initial setup can be added here
 });
