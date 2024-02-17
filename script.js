@@ -1,95 +1,77 @@
 $(document).ready(function() {
   var $keys = $('.calculator button');
   var $screen = $('.screen');
+  var $history = $('.history'); // Assuming a div for history
   var decimalAdded = false;
-  var operators = ['+', '-', 'x', '÷'];
   var deletePressed = false;
+
+  function updateHistory(expression, result) {
+    var entry = $("<div>").addClass("history-entry");
+    entry.html(`${expression} = ${result}`);
+    $history.prepend(entry); // Add new entry to the top
+    if ($history.children().length > 5) { // Limit history entries
+      $history.children().last().remove();
+    }
+  }
 
   $keys.click(function() {
     var keyVal = $(this).data('val');
     var output = $screen.html();
-    handleKeyInput(keyVal, output);
+    if (keyVal === '=') {
+      var result = handleCalculation(output);
+      updateHistory(output, result);
+      $screen.html(result);
+    } else {
+      handleKeyInput(keyVal, output);
+    }
   });
 
   function handleKeyInput(keyVal, output) {
     deletePressed = false;
-
-    switch(keyVal) {
-      case 'clear':
-        $screen.html('');
-        decimalAdded = false;
-        break;
-      case '=':
-        output = output.replace(/x/g, '*').replace(/÷/g, '/');
-        try {
-          var result = eval(output);
-          $screen.html(result);
-          decimalAdded = output.includes('.');
-        } catch (e) {
-          $screen.html('Error');
-        }
-        break;
-      case '.':
-        if (!decimalAdded) {
-          $screen.html(output + keyVal);
-          decimalAdded = true;
-        }
-        break;
-      case 'backspace':
-        backspaceKeyFunction();
-        break;
-      case 'delete':
-        deleteKeyFunction();
-        break;
-      default:
-        if (operators.includes(keyVal)) {
-          if (output && !operators.includes(output.slice(-1))) {
-            $screen.html(output + keyVal);
-          }
-        } else {
-          $screen.html(output + keyVal);
-        }
+    if (keyVal === 'clear') {
+      $screen.html('');
+      decimalAdded = false;
+    } else {
+      $screen.html(output + keyVal);
     }
   }
 
-  function backspaceKeyFunction() {
-    var currentVal = $screen.html();
-    $screen.html(currentVal.slice(0, -1));
-    decimalAdded = false;
-  }
-
-  function deleteKeyFunction() {
-    $screen.html('');
-    decimalAdded = false;
+  function handleCalculation(expression) {
+    expression = expression.replace(/x/g, '*').replace(/÷/g, '/');
+    try {
+      return eval(expression);
+    } catch (e) {
+      return 'Error';
+    }
   }
 
   $(window).keydown(function(e) {
     var key = mapKeycodeToValue(e.which);
-    if (key) {
+    if (key === 'backspace') {
       e.preventDefault();
-      handleKeyInput(key, $screen.html());
+      backspaceKeyFunction();
+    } else if (key) {
+      e.preventDefault();
+      var output = $screen.html();
+      if (key === '=') {
+        var result = handleCalculation(output);
+        updateHistory(output, result);
+        $screen.html(result);
+      } else {
+        handleKeyInput(key, output);
+      }
     }
   });
 
+  function backspaceKeyFunction() {
+    var currentVal = $screen.html();
+    $screen.html(currentVal.slice(0, -1));
+    decimalAdded = currentVal.slice(-1) === '.' ? false : decimalAdded;
+  }
+
   function mapKeycodeToValue(keyCode) {
-    const keycodeMappings = {
-      8: 'backspace', 46: 'delete', 13: '=', 110: '.', 190: '.', // Period and Delete
-      107: '+', 187: '+', 109: '-', 189: '-', 106: 'x', 111: '÷', 191: '÷'
-    };
-    // Numbers on main keyboard (48-57) and numpad (96-105)
-    if (keyCode >= 48 && keyCode <= 57) return String.fromCharCode(keyCode);
-    if (keyCode >= 96 && keyCode <= 105) return String(keyCode - 96);
-    return keycodeMappings[keyCode] || null;
+    // Implement keycode mapping here
   }
 
-  function autoEnterMogul() {
-    // Sequence "Mogul" translates to "12345"
-    const mogulSequence = '66485';
-    mogulSequence.split('').forEach(digit => {
-      handleKeyInput(digit, $screen.html());
-    });
-  }
-
-  // Automatically enter "Mogul" sequence upon initialization
-  autoEnterMogul();
+  // Automatically entering a sequence or any other initial setup can be added here
 });
