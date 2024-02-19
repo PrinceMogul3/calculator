@@ -28,13 +28,17 @@ $(document).ready(function() {
 
   function handleKeyInput(keyVal, output) {
     if (keyVal === 'clear') {
-      $screen.html('');
+      $screen.html('0');
       decimalAdded = false;
     } else {
-      $screen.html(output + keyVal);
+      if (output === "0") {
+        $screen.html(keyVal);
+      } else {
+        $screen.html(output + keyVal);
+      }
     }
   }
-
+  
   function handleCalculation(expression) {
     expression = expression.replace(/x/g, '*').replace(/÷/g, '/');
     try {
