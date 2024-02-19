@@ -1,15 +1,15 @@
 $(document).ready(function() {
   var $keys = $('.calculator button');
   var $screen = $('.screen');
-  var $history = $('.history'); // Assuming a div for history
+  var $history = $('.history');
   var decimalAdded = false;
-  var escPressedTime = 0; // To track the time when Esc is pressed
+  var escPressedTime = 0;
 
   function updateHistory(expression, result) {
     var entry = $("<div>").addClass("history-entry");
     entry.html(`${expression} = ${result}`);
-    $history.prepend(entry); // Add new entry to the top
-    if ($history.children().length > 5) { // Limit history entries
+    $history.prepend(entry);
+    if ($history.children().length > 5) {
       $history.children().last().remove();
     }
   }
@@ -38,7 +38,7 @@ $(document).ready(function() {
       }
     }
   }
-  
+
   function handleCalculation(expression) {
     expression = expression.replace(/x/g, '*').replace(/÷/g, '/');
     try {
@@ -71,16 +71,20 @@ $(document).ready(function() {
 
   function backspaceKeyFunction() {
     var currentVal = $screen.html();
-    $screen.html(currentVal.slice(0, -1));
+    if (currentVal.length <= 1) {
+      $screen.html('0');
+    } else {
+      $screen.html(currentVal.slice(0, -1));
+    }
     decimalAdded = currentVal.slice(-1) === '.' ? false : decimalAdded;
   }
 
   function handleEscFunctionality() {
     var currentTime = new Date().getTime();
-    if (currentTime - escPressedTime < 500) { // 500 ms for double press
-      $history.empty(); // Clear history
+    if (currentTime - escPressedTime < 500) {
+      $history.empty();
     } else {
-      $screen.html(''); // Clear screen
+      $screen.html('0');
     }
     escPressedTime = currentTime;
   }
@@ -89,7 +93,7 @@ $(document).ready(function() {
     const keycodeMappings = {
       8: 'backspace',
       13: '=',
-      27: 'esc', // ESC key for clearing screen or history
+      27: 'esc',
       46: 'clear',
     };
     if (keyCode === 190 || keyCode === 110) return '.';
