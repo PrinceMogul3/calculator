@@ -3,6 +3,7 @@ $(document).ready(function() {
   var $screen = $('.screen');
   var $history = $('.history'); // Assuming a div for history
   var decimalAdded = false;
+  var escPressedTime = 0; // To track the time when Esc is pressed
 
   function updateHistory(expression, result) {
     var entry = $("<div>").addClass("history-entry");
@@ -49,6 +50,8 @@ $(document).ready(function() {
       e.preventDefault();
       if (key === 'backspace') {
         backspaceKeyFunction();
+      } else if (key === 'esc') {
+        handleEscFunctionality();
       } else {
         var output = $screen.html();
         if (key === '=') {
@@ -68,19 +71,27 @@ $(document).ready(function() {
     decimalAdded = currentVal.slice(-1) === '.' ? false : decimalAdded;
   }
 
+  function handleEscFunctionality() {
+    var currentTime = new Date().getTime();
+    if (currentTime - escPressedTime < 500) { // 500 ms for double press
+      $history.empty(); // Clear history
+    } else {
+      $screen.html(''); // Clear screen
+    }
+    escPressedTime = currentTime;
+  }
+
   function mapKeycodeToValue(keyCode, event) {
     const keycodeMappings = {
-      8: 'backspace', // Backspace for Mac and others
-      13: '=', // Enter key or Return key
-      46: 'clear', // Delete key for Mac (acts as 'clear' in this context)
+      8: 'backspace',
+      13: '=',
+      27: 'esc', // ESC key for clearing screen or history
+      46: 'clear',
     };
-    // Special case for dot (.)
     if (keyCode === 190 || keyCode === 110) return '.';
-    // Number keys from top row and Numpad
     if ((keyCode >= 48 && keyCode <= 57 && !event.shiftKey) || (keyCode >= 96 && keyCode <= 105)) {
       return String.fromCharCode(keyCode >= 96 ? keyCode - 48 : keyCode);
     }
-    // Operator keys (with shift key for +)
     if (keyCode === 107 || (keyCode === 187 && event.shiftKey)) return '+';
     if (keyCode === 109 || keyCode === 189) return '-';
     if (keyCode === 106 || (keyCode === 56 && event.shiftKey)) return 'x';
