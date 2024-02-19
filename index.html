@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>I love you Alicia</title>
+  <title>Minimalist Calculator</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
   <div class="calculator">
-    <div class="calculator__output">0</div> <!-- Start with 0 -->
-    <div class="calculator__keys">
-      <!-- Operator buttons -->
-      <button class="calculator__key--operator" data-val="+">+</button>
-      <button class="calculator__key--operator" data-val="-">-</button>
-      <button class="calculator__key--operator" data-val="x">×</button>
-      <button class="calculator__key--operator" data-val="÷">÷</button>
-      
-      <!-- Number buttons -->
-      <button class="calculator__key" data-val="7">7</button>
-      <button class="calculator__key" data-val="8">8</button>
-      <button class="calculator__key" data-val="9">9</button>
-      <button class="calculator__key--enter" data-val="=">=</button>
-      
-      <button class="calculator__key" data-val="4">4</button>
-      <button class="calculator__key" data-val="5">5</button>
-      <button class="calculator__key" data-val="6">6</button>
-      
-      <button class="calculator__key" data-val="1">1</button>
-      <button class="calculator__key" data-val="2">2</button>
-      <button class="calculator__key" data-val="3">3</button>
-      <button class="calculator__key" data-val="AC">AC</button>
-      
-      <!-- Zero and decimal point buttons -->
-      <button class="calculator__key" data-val="0" style="grid-column: 1 / span 2;">0</button> <!-- Double width for the zero button -->
-      <button class="calculator__key" data-val=".">.</button>
+    <div class="screen">15x3</div>
+    <div class="buttons">
+    <div class="history"></div>
+      <div class="numbers">
+        <button data-val="9">9</button>
+        <button data-val="8">8</button>
+        <button data-val="7">7</button>
+        <button data-val="6">6</button>
+        <button data-val="5">5</button>
+        <button data-val="4">4</button>
+        <button data-val="3">3</button>
+        <button data-val="2">2</button>
+        <button data-val="1">1</button>
+        <button data-val="clear">C</button>
+        <button data-val=".">.</button>
+        <button data-val="0">0</button>
+      </div>
+      <div class="operators">
+        <button data-val="÷">÷</button>
+        <button data-val="x">x</button>
+        <button data-val="-">-</button>
+        <button data-val="+">+</button>
+        <button data-val="=">=</button>
+      </div>
     </div>
   </div>
 
