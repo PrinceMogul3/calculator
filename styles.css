@@ -1,131 +1,86 @@
-  /* Reset & body */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-html,
+html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-  min-height: 100%;
+    background: #191919;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-body {
-  background: #1A1A1A;
-  font-family: 'Open Sans', sans-serif;
-}
-
-/* Calculator */
 .calculator {
-  width: 300px;
-  background:#323232;
-  margin: 30px auto;
-  position: fixed;
-  overflow: hidden;
-  border-radius: 20px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    width: 300px;
+    background: #323232;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-/* Screen */
 .screen {
-  background: #F4F4F4;
-  padding: 15px 28px;
-  height: 69px;
-  text-align: right;
-  font-size: 29px;
-  color: #4c455a;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  transition: color 0.6s ease-in-out;
+    background: #F4F4F4;
+    padding: 15px 28px;
+    font-size: 29px;
+    color: #191919;
+    text-align: right;
 }
 
-.screen::after {
-  content: '';
-  display: table;
-  clear: both;
+.history {
+    background: #2C2C2C;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 200px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
-/* Buttons */
 .buttons button {
-  float: right;
-  border: none;
-  background: transparent;
-  color: #fff;
-  padding: 15px 10px;
-  outline: none;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 14px;
-  cursor: pointer;
+    float: right;
+    border: none;
+    background: #191919;
+    color: #fff;
+    padding: 15px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .buttons button:hover {
-  background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.buttons button:active,
-.buttons button.active {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
+.numbers, .operators {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-.buttons::after {
-  content: '';
-  display: table;
-  clear: both;
-}
-
-.numbers {
-  float: left;
-  width: 75%;
-  padding: 10px;
-}
-
-.numbers button {
-  width: 33.3333%;
-  padding: 18px 10px;
+.numbers button, .operators button {
+    width: 33.3333%;
+    margin: 5px 0;
+    text-align: center;
 }
 
 .operators {
-  float: right;
-  width: 25%;
-  padding: 16px 10px 10px;
-  background: rgba(0, 0, 0, 0.1);
-  min-height: 260px;
+    background: none;
 }
 
 .operators button {
-  width: 100%;
-  padding: 11px 10px;
-}
-
-.operators button[data-val="x"] {
-  font-size: 13px;
-}
-
-.operators button[data-val="-"] {
-  font-size: 18px;
-}
-
-.operators button[data-val="="] {
-  font-size: 16px;
-}
-
-/* History */
-.history {
-  background: #2C2C2C; /* Slightly darker than calculator for contrast */
-  color: #FFFFFF;
-  font-size: 14px;
-  padding: 10px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  max-height: 200px;
-  overflow-y: auto;
+    width: 100%;
 }
 
 .history-entry {
-  border-bottom: 1px solid #414141;
-  padding: 5px 0;
+    border-bottom: 1px solid #414141;
+    padding: 5px 0;
 }
