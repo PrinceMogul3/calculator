@@ -3,7 +3,7 @@ $(document).ready(function() {
   var $screen = $('.screen');
   var $history = $('.history');
   var decimalAdded = false;
-  var escPressedTime = 0;
+  var calculationCompleted = false; // Flag to track if the last action was a calculation
 
   function updateHistory(expression, result) {
     var entry = $("<div>").addClass("history-entry");
@@ -17,10 +17,18 @@ $(document).ready(function() {
   $keys.click(function() {
     var keyVal = $(this).data('val');
     var output = $screen.html();
+    
+    if (calculationCompleted && !isNaN(keyVal)) {
+      output = "0"; // Clear the screen if the last action was a calculation
+    }
+    
+    calculationCompleted = false; // Reset the flag for every key except '='
+
     if (keyVal === '=') {
       var result = handleCalculation(output);
       updateHistory(output, result);
       $screen.html(result);
+      calculationCompleted = true; // Set the flag as calculation is done
     } else {
       handleKeyInput(keyVal, output);
     }
@@ -30,19 +38,19 @@ $(document).ready(function() {
     if (keyVal === 'clear') {
       $screen.html('0');
       decimalAdded = false;
+    } else if (output === "0" || calculationCompleted) {
+      $screen.html(keyVal === 'clear' ? '0' : keyVal);
+      calculationCompleted = false; // Reset the flag if a number or operator is pressed
     } else {
-      if (output === "0") {
-        $screen.html(keyVal);
-      } else {
-        $screen.html(output + keyVal);
-      }
+      $screen.html(output + keyVal);
     }
   }
 
   function handleCalculation(expression) {
     expression = expression.replace(/x/g, '*').replace(/÷/g, '/');
     try {
-      return eval(expression);
+      var result = eval(expression);
+      return +result.toFixed(2); // Round the result to two decimal places
     } catch (e) {
       return 'Error';
     }
@@ -58,10 +66,17 @@ $(document).ready(function() {
         handleEscFunctionality();
       } else {
         var output = $screen.html();
+        if (calculationCompleted && !isNaN(key)) {
+          output = "0";
+        }
+        
+        calculationCompleted = false; // Reset the flag for keyboard input as well
+
         if (key === '=') {
           var result = handleCalculation(output);
           updateHistory(output, result);
           $screen.html(result);
+          calculationCompleted = true;
         } else {
           handleKeyInput(key, output);
         }
@@ -71,8 +86,9 @@ $(document).ready(function() {
 
   function backspaceKeyFunction() {
     var currentVal = $screen.html();
-    if (currentVal.length <= 1) {
+    if (currentVal.length <= 1 || calculationCompleted) {
       $screen.html('0');
+      calculationCompleted = false;
     } else {
       $screen.html(currentVal.slice(0, -1));
     }
@@ -87,6 +103,7 @@ $(document).ready(function() {
       $screen.html('0');
     }
     escPressedTime = currentTime;
+    calculationCompleted = false; // Reset the flag for ESC functionality as well
   }
 
   function mapKeycodeToValue(keyCode, event) {
