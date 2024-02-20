@@ -18,7 +18,7 @@ body {
 /* Calculator */
 .calculator {
   width: 300px;
-  background: #191919; /* Updated background color */
+  background: #191919; /* Calculator background */
   margin: 30px auto;
   position: fixed;
   overflow: hidden;
@@ -52,7 +52,7 @@ body {
 .buttons button {
   float: right;
   border: none;
-  background: #191919; /* Updated button background color */
+  background: #191919; /* Buttons background */
   color: #fff;
   padding: 15px 10px;
   outline: none;
@@ -91,7 +91,7 @@ body {
   float: right;
   width: 25%;
   padding: 16px 10px 10px;
-  background: #191919; /* Updated to match the calculator background */
+  background: #191919; /* Matching calculator background */
   min-height: 260px;
 }
 
@@ -100,20 +100,19 @@ body {
   padding: 11px 10px;
 }
 
-.operators button[data-val="x"], 
-.operators button[data-val="-"], 
-.operators button[data-val="="] {
-  background: #191919; /* Ensure consistency in button backgrounds */
+/* History */
+.history {
+  background: #191919; /* Updated to match your request */
+  color: #FFFFFF;
+  font-size: 14px;
+  padding: 10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.operators button[data-val="x"] {
-  font-size: 13px;
-}
-
-.operators button[data-val="-"] {
-  font-size: 18px;
-}
-
-.operators button[data-val="="] {
-  font-size: 16px;
+.history-entry {
+  border-bottom: 1px solid #414141;
+  padding: 5px 0;
 }
